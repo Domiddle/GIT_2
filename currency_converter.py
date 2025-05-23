@@ -5,28 +5,44 @@ class Currency:
         self.root = root
         self.root.title("Währungsrechner")
 
-        # Label
-        self.label = tk.Label(root, text="Gib den Wert in Euro an:")
-        self.label.pack(pady=10)
-
         # Entry-Feld
         self.entry = tk.Entry(root)
         self.entry.pack(pady=5)
 
-        # Button
-        self.button = tk.Button(root, text="Umrechnen", command=self.anzeigen)
-        self.button.pack(pady=10)
+        self.value = {"Yen": 162, "VD": 29379, "BR": 6.49}
+
+        self.button_yen = tk.Button(root, text="Yen", command=lambda: self.anzeigen("Yen"))
+        self.button_yen.pack(pady=10)
+
+        self.button_vd = tk.Button(root, text="Vietnamese Dong", command=lambda: self.anzeigen("VD"))
+        self.button_vd.pack(pady=10)
+
+        self.button_br = tk.Button(root, text="Brazilian Real", command=lambda: self.anzeigen("BR"))
+        self.button_br.pack(pady=10)
 
         # Label für Ausgabe
         self.output_label = tk.Label(root, text="")
         self.output_label.pack(pady=10)
 
-    def anzeigen(self):
-        cur = self.entry.get()
-        self.output_label.config(text=f"{cur_new}!")
+    def anzeigen(self, key):
+        value = self.entry.get()
+        try:
+            euro = float(value)
+            result = euro * self.value[key]
+            if key == "Yen":
+                text = f"{euro} Euro sind {result:.2f} Yen"
+
+            elif key == "VD":
+                text = f"{euro} Euro sind {result:.2f} Vietnamesische Dong"
+
+            elif key == "BR":
+                text = f"{euro} Euro sind {result:.2f} Brasilianische Real"
+
+            self.output_label.config(text=text)
+        except ValueError:
+            self.output_label.config(text="Bitte gültige Zahl eingeben.")
 
 if __name__ == "__main__":
     root = tk.Tk()
     gui = Currency(root)
     root.mainloop()
-
