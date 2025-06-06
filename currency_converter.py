@@ -4,7 +4,8 @@ class Currency:
     def __init__(self, root):
         self.root = root
         self.root.title("Währungsrechner")
-
+        Vietnamesische_Dong="Vietnamesische Dong"
+        Brasillianische_Real="Brasilianische Real"
         # Entry-Feld
         self.entry = tk.Entry(root)
         self.entry.pack(pady=5)
@@ -14,11 +15,14 @@ class Currency:
         self.button_yen = tk.Button(root, text="Yen", command=lambda: self.anzeigen("Yen"))
         self.button_yen.pack(pady=10)
 
-        self.button_vd = tk.Button(root, text="Vietnamese Dong", command=lambda: self.anzeigen("VD"))
+        self.button_vd = tk.Button(root, text=Vietnamesische_Dong, command=lambda: self.anzeigen("VD"))
         self.button_vd.pack(pady=10)
 
-        self.button_br = tk.Button(root, text="Brazilian Real", command=lambda: self.anzeigen("BR"))
+        self.button_br = tk.Button(root, text=Brasillianische_Real, command=lambda: self.anzeigen("BR"))
         self.button_br.pack(pady=10)
+
+        self.language_en = tk.Button(root, text="English", command=self.change_to_english)
+        self.language_en.pack(pady=10)
 
         # Label für Ausgabe
         self.output_label = tk.Label(root, text="")
@@ -29,18 +33,42 @@ class Currency:
         try:
             euro = float(value)
             result = euro * self.value[key]
-            if key == "Yen":
-                text = f"{euro} Euro sind {result:.2f} Yen"
+            language=self.language_en.cget('text')
+            if language=="English":
+                if key == "Yen":
+                    text = f"{euro} Euro sind {result:.2f} Yen"
 
-            elif key == "VD":
-                text = f"{euro} Euro sind {result:.2f} Vietnamesische Dong"
+                elif key == "VD":
+                    text = f"{euro} Euro sind {result:.2f} Vietnamesische Dong"
 
-            elif key == "BR":
-                text = f"{euro} Euro sind {result:.2f} Brasilianische Real"
+                elif key == "BR":
+                    text = f"{euro} Euro sind {result:.2f} Brasilianische Real"
 
-            self.output_label.config(text=text)
+                self.output_label.config(text=text)
+
+            if language == "Deutsch":
+                if key == "Yen":
+                    text = f"{euro} Euros are {result:.2f} Yen"
+                elif key == "VD":
+                    text = f"{euro} Euros are {result:.2f} Vietnamese Dong"
+                elif key == "BR":
+                    text = f"{euro} Euros are {result:.2f} Brazilian Real"
+
+                self.output_label.config(text=text)
         except ValueError:
-            self.output_label.config(text="Bitte gültige Zahl eingeben.")
+            self.output_label.config(text="Error")
+    def change_to_english(self):
+        lang=self.language_en.cget('text')
+        if lang=="English":
+            self.root.title("Currency Converter")
+            self.button_vd.config(text="Vietnamese Dong")
+            self.button_br.config(text="Brazilian Real")
+            self.language_en.config(text="Deutsch")
+        elif lang == "Deutsch":
+            self.root.title("Währungsrechner")
+            self.button_vd.config(text="Vietnamesische Dong")
+            self.button_br.config(text="Brasilianische Real")
+            self.language_en.config(text="English")
 
 if __name__ == "__main__":
     root = tk.Tk()
